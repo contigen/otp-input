@@ -50,6 +50,7 @@ export function OTPInput() {
             className='form-otp__input'
             required
             placeholder='･'
+            inputMode='numeric'
             enterKeyHint={idx === arr.length - 1 ? `done` : `next`}
           />
         ))}
