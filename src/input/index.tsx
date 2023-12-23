@@ -15,7 +15,6 @@ export function OTPInput() {
     // React's onChange is JavaScript's onInput, so InputEvent
     ;(evt.nativeEvent as InputEvent).inputType !== `deleteContentBackward` &&
       ($input.nextElementSibling as HTMLElement)?.focus()
-    ;($input.nextElementSibling as HTMLElement)?.focus()
   }
 
   function handleKeyDown(evt: KeyboardEvent) {
