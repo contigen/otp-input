@@ -1,0 +1,21 @@
+.form-otp {
+    border: 1px dashed #ccc;
+    border-radius: 1rem;
+    margin-block: 2rem;
+    padding: 1rem;
+}
+
+.form-otp__box {
+    text-align: center;
+    place-items: center;
+}
+
+.form-otp__input {
+    border: 1px solid;
+    border-radius: 30px;
+    margin-inline: .2rem;
+    text-align: center;
+    width: min-content;
+    padding-block: 1rem;
+    width: 2rem
+}
