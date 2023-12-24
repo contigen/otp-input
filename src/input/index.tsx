@@ -34,14 +34,16 @@ export function OTPInput() {
     if (isNaN(+key)) return
   }
 
-  function handlePaste(evt: ClipboardEvent<HTMLFormElement>) {
-    const $input = evt.target as HTMLInputElement
+  function handlePaste({
+    target,
+    clipboardData,
+  }: ClipboardEvent<HTMLFormElement>) {
+    const $input = target as HTMLInputElement
     const $inputsParent = $input.parentElement!
     const inputsLength = $inputsParent.childElementCount
-    let clipboardData = evt.clipboardData.getData(`text`)
-    clipboardData = clipboardData.slice(0, inputsLength)
+    const clip = clipboardData.getData(`text`)
     for (let i = 0; i < inputsLength; i++) {
-      const data = clipboardData[i]
+      const data = clip[i]
       if (isNaN(+data)) continue
       ;($inputsParent.children[i] as HTMLInputElement).value = data
     }
