@@ -12,49 +12,58 @@ export function OTPInput() {
 
   function handleChange(evt: FormEvent) {
     const $input = evt.target as HTMLInputElement
-    console.log(evt)
     // React's onChange is JavaScript's onInput, so InputEvent
     ;(evt.nativeEvent as InputEvent).inputType !== `deleteContentBackward` &&
-      ($input.nextElementSibling as HTMLElement)?.focus()
+      ($input.nextElementSibling as HTMLElement | null)?.focus()
   }
 
   function handleKeyDown({ target, key }: KeyboardEvent) {
     const $input = target as HTMLInputElement
     let currentInput = $input
-    console.log(`keydown`, target)
+    const prevInput = currentInput.previousElementSibling as HTMLInputElement
     while (currentInput?.value === ``) {
-      const prevInput = currentInput.previousElementSibling as HTMLInputElement
       prevInput?.value === `` && prevInput?.focus()
       currentInput = prevInput
     }
     if (key === `Backspace`) {
-      const prevInput = $input.previousElementSibling as HTMLElement
       setTimeout(() => prevInput?.focus())
     }
     if (isNaN(+key)) return
   }
 
-  function handlePaste({
-    target,
-    clipboardData,
-  }: ClipboardEvent<HTMLFormElement>) {
+  function handleKeyUp({ key, target }: KeyboardEvent) {
     const $input = target as HTMLInputElement
-    const $inputsParent = $input.parentElement!
-    const inputsLength = $inputsParent.childElementCount
-    const clip = clipboardData.getData(`text`)
-    for (let i = 0; i < inputsLength; i++) {
-      const data = clip[i]
-      if (isNaN(+data)) continue
-      ;($inputsParent.children[i] as HTMLInputElement).value = data
+    const nextInput = $input.nextElementSibling as HTMLInputElement | null
+    if ($input.value.length === 1) {
+      nextInput?.focus()
+      if (!isNaN(+key) && nextInput) {
+        nextInput.value = key
+      }
     }
   }
 
+  function handlePaste(evt: ClipboardEvent<HTMLFormElement>) {
+    const $input = evt.target as HTMLInputElement
+    const $inputsParent = $input.parentElement!
+    const inputsLength = $inputsParent.childElementCount
+    const clip = evt.clipboardData.getData(`text`)
+    for (let i = 0; i < inputsLength; i++) {
+      const data = clip[i]
+      if (isNaN(+data)) {
+        evt.preventDefault()
+        continue
+      }
+      ;($inputsParent.children[i] as HTMLInputElement).value = data
+      ;($inputsParent.lastElementChild as HTMLInputElement).focus()
+    }
+  }
   return (
     <form
       className='form-otp'
       onSubmit={handleSubmit}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
       onPaste={handlePaste}
     >
       <div className='form-otp__box'>
