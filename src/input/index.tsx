@@ -10,33 +10,36 @@ export function OTPInput() {
     new FormData($form as HTMLFormElement)
   }
 
-  function handleChange(evt: FormEvent) {
-    const $input = evt.target as HTMLInputElement
+  function handleChange({ nativeEvent, target }: FormEvent) {
+    const $input = target as HTMLInputElement
     // React's onChange is JavaScript's onInput, so InputEvent
-    ;(evt.nativeEvent as InputEvent).inputType !== `deleteContentBackward` &&
+    ;(nativeEvent as InputEvent).inputType !== `deleteContentBackward` &&
       ($input.nextElementSibling as HTMLElement | null)?.focus()
   }
 
   function handleKeyDown(evt: KeyboardEvent) {
     const $input = evt.target as HTMLInputElement
     const prevInput = $input.previousElementSibling as HTMLInputElement
+    console.log(evt)
+    const key = evt.key
     {
       let currentInput = $input
-      while (currentInput?.value === ``) {
+      // hacky?
+      while (key !== `Tab` && currentInput?.value === ``) {
         prevInput?.value === `` && prevInput?.focus()
         currentInput = prevInput
       }
     }
-    if (evt.key === `Backspace`) {
+    if (key === `Backspace`) {
       evt.preventDefault()
       $input.value = ``
       setTimeout(() => prevInput?.focus())
     }
-    const key = evt.key
-    if (isNaN(+key)) evt.preventDefault()
+    if (key !== `Tab` && isNaN(+key)) evt.preventDefault()
   }
 
   function handleKeyUp({ key, target }: KeyboardEvent) {
+    console.log(key)
     const $input = target as HTMLInputElement
     const nextInput = $input.nextElementSibling as HTMLInputElement | null
     if ($input.value.length === 1 && key !== `Backspace`) {
