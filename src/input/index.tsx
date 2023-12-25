@@ -17,24 +17,29 @@ export function OTPInput() {
       ($input.nextElementSibling as HTMLElement | null)?.focus()
   }
 
-  function handleKeyDown({ target, key }: KeyboardEvent) {
-    const $input = target as HTMLInputElement
-    let currentInput = $input
-    const prevInput = currentInput.previousElementSibling as HTMLInputElement
-    while (currentInput?.value === ``) {
-      prevInput?.value === `` && prevInput?.focus()
-      currentInput = prevInput
+  function handleKeyDown(evt: KeyboardEvent) {
+    const $input = evt.target as HTMLInputElement
+    const prevInput = $input.previousElementSibling as HTMLInputElement
+    {
+      let currentInput = $input
+      while (currentInput?.value === ``) {
+        prevInput?.value === `` && prevInput?.focus()
+        currentInput = prevInput
+      }
     }
-    if (key === `Backspace`) {
+    if (evt.key === `Backspace`) {
+      evt.preventDefault()
+      $input.value = ``
       setTimeout(() => prevInput?.focus())
     }
-    if (isNaN(+key)) return
+    const key = evt.key
+    if (isNaN(+key)) evt.preventDefault()
   }
 
   function handleKeyUp({ key, target }: KeyboardEvent) {
     const $input = target as HTMLInputElement
     const nextInput = $input.nextElementSibling as HTMLInputElement | null
-    if ($input.value.length === 1) {
+    if ($input.value.length === 1 && key !== `Backspace`) {
       nextInput?.focus()
       if (!isNaN(+key) && nextInput) {
         nextInput.value = key
