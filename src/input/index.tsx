@@ -88,9 +88,6 @@ export function OTPInput() {
           />
         ))}
       </div>
-      <br />
-      <br />
-      <button type='submit'>submit</button>
     </form>
   )
 }
