@@ -20,7 +20,6 @@ export function OTPInput() {
   function handleKeyDown(evt: KeyboardEvent) {
     const $input = evt.target as HTMLInputElement
     const prevInput = $input.previousElementSibling as HTMLInputElement
-    console.log(evt)
     const key = evt.key
     {
       let currentInput = $input
@@ -39,7 +38,6 @@ export function OTPInput() {
   }
 
   function handleKeyUp({ key, target }: KeyboardEvent) {
-    console.log(key)
     const $input = target as HTMLInputElement
     const nextInput = $input.nextElementSibling as HTMLInputElement | null
     if ($input.value.length === 1 && key !== `Backspace`) {
