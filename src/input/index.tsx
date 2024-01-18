@@ -25,6 +25,8 @@ export function OTPInput() {
       let currentInput = $input
       // hacky?
       while (key !== `Tab` && currentInput?.value === ``) {
+        const prevInput =
+          currentInput.previousElementSibling as HTMLInputElement
         prevInput?.value === `` && prevInput?.focus()
         currentInput = prevInput
       }
