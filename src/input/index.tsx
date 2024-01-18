@@ -18,9 +18,10 @@ export function OTPInput() {
   }
 
   function handleKeyDown(evt: KeyboardEvent) {
+    const key = evt.key
+    if (!evt.ctrlKey && key.length === 1 && isNaN(+key)) evt.preventDefault()
     const $input = evt.target as HTMLInputElement
     const prevInput = $input.previousElementSibling as HTMLInputElement
-    const key = evt.key
     {
       let currentInput = $input
       // hacky?
@@ -36,7 +37,6 @@ export function OTPInput() {
       $input.value = ``
       setTimeout(() => prevInput?.focus())
     }
-    if (key !== `Tab` && isNaN(+key)) evt.preventDefault()
   }
 
   function handleKeyUp({ key, target }: KeyboardEvent) {
