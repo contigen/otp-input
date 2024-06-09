@@ -61,6 +61,7 @@ export function OTPInput() {
         evt.preventDefault()
         continue
       }
+      // eslint-disable-next-line no-extra-semi
       ;($inputsParent.children[i] as HTMLInputElement).value = data
       ;($inputsParent.lastElementChild as HTMLInputElement).focus()
     }
