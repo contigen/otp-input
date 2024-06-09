@@ -2,7 +2,7 @@
 
 An OTP input written in React + TS.
 
-Devoid of `useState` calls － no React hook used.
+Devoid of `useState` calls.
 All you get from a regular input:
 
 - Paste works excellently, inputting only numbers from the clipboard.
