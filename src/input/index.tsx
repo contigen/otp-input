@@ -1,4 +1,10 @@
-import type { FormEvent, KeyboardEvent, ClipboardEvent } from 'react'
+import {
+  type FormEvent,
+  type KeyboardEvent,
+  type ClipboardEvent,
+  useRef,
+  useEffect,
+} from 'react'
 import './index.css'
 
 export function OTPInput() {
@@ -8,6 +14,7 @@ export function OTPInput() {
     evt.preventDefault()
     const $form = evt.target
     new FormData($form as HTMLFormElement)
+    alert(`Submitted!`)
   }
 
   function handleChange({ nativeEvent, target }: FormEvent) {
@@ -66,6 +73,44 @@ export function OTPInput() {
       ;($inputsParent.lastElementChild as HTMLInputElement).focus()
     }
   }
+
+  const formRef = useRef<HTMLFormElement>(null)
+
+  function autofill() {
+    const $form = formRef.current
+    if (!$form) return
+    if (`OTPCredential` in window) {
+      const abortController = new AbortController()
+      if ($form) {
+        $form.onsubmit = abortController.abort
+      }
+      navigator.credentials
+        .get({
+          otp: { transport: [`sms`] },
+          signal: abortController.signal,
+        })
+        .then(({ code }) => {
+          const inputsLength = $form.childElementCount
+          for (let i = 0; i < inputsLength; i++) {
+            const data = code[i]
+            if (isNaN(+data)) {
+              continue
+            }
+            // eslint-disable-next-line no-extra-semi
+            ;($form.children[i] as HTMLInputElement).value = data
+            ;($form.lastElementChild as HTMLInputElement).focus()
+            $form?.requestSubmit()
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    }
+  }
+  useEffect(() => {
+    window.addEventListener(`load`, autofill)
+    return () => window.removeEventListener(`load`, autofill)
+  }, [])
   return (
     <form
       className='form-otp'
@@ -74,6 +119,7 @@ export function OTPInput() {
       onKeyDown={handleKeyDown}
       onKeyUp={handleKeyUp}
       onPaste={handlePaste}
+      ref={formRef}
     >
       <div className='form-otp__box'>
         {INPUTS_LENGTH.map((_, idx, arr) => (
@@ -88,6 +134,7 @@ export function OTPInput() {
             placeholder='･'
             inputMode='numeric'
             enterKeyHint={idx === arr.length - 1 ? `done` : `next`}
+            autoComplete='one-time-code'
           />
         ))}
       </div>
