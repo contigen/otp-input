@@ -1,5 +1,6 @@
 interface OTPCredential extends Credential {
   readonly code: string
+  type: `otp`
 }
 
 interface ExtendedCredentialRequestOptions extends CredentialRequestOptions {
