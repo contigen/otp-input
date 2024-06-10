@@ -81,15 +81,14 @@ export function OTPInput() {
     if (!$form) return
     if (`OTPCredential` in window) {
       const abortController = new AbortController()
-      if ($form) {
-        $form.onsubmit = abortController.abort
-      }
+      $form.onsubmit = abortController.abort
       navigator.credentials
         .get({
           otp: { transport: [`sms`] },
           signal: abortController.signal,
         })
         .then(({ code }) => {
+          alert(code)
           const inputsLength = $form.childElementCount
           for (let i = 0; i < inputsLength; i++) {
             const data = code[i]
@@ -99,7 +98,7 @@ export function OTPInput() {
             // eslint-disable-next-line no-extra-semi
             ;($form.children[i] as HTMLInputElement).value = data
             ;($form.lastElementChild as HTMLInputElement).focus()
-            $form?.requestSubmit()
+            $form.submit()
           }
         })
         .catch(err => {
