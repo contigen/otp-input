@@ -1,5 +1,7 @@
 ## One-time-password Component
 
+![word cloud forming the text 'otp-input' in ASCII format](./src/assets/otp-input.png)
+
 An OTP input written in React + TS.
 
 Devoid of `useState` calls.
