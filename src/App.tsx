@@ -11,8 +11,8 @@ function App() {
       />
       <p
         style={{
-          fontSize: `2rem`,
-          letterSpacing: `-.052em`,
+          fontSize: `1.5rem`,
+          letterSpacing: `-.04em`,
           fontWeight: 600,
         }}
       >
